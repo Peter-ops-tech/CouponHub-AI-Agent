@@ -45,41 +45,34 @@ CouponHub 是「人工智慧代理人原理及實務」課程的 AI Agent 專題
 | unittest | 自動化測試 |
 | Git / GitHub | 版本管理 |
 
+
 ## 3. Agent 系統架構
 
-使用者輸入自然語言問題
-        |
-        v
-Streamlit 聊天介面
-        |
-        v
-CouponHub Agent
-        |
-        v
-Ollama / Llama 3.2
-        |
-        v
-Agent 選擇 search_offers Tool
-        |
-        v
-工具參數驗證與正規化
-        |
-        v
-Python 查詢 SQLite
-        |
-        v
-回傳已核准且目前有效的優惠
-        |
-        v
-LLM 根據查詢結果回答
-        |
-        v
-Streamlit 顯示回答
+本專案使用 LLM Tool Calling 架構，將自然語言理解與實際資料查詢分開處理。
 
-系統會同時將執行過程寫入 JSONL Trace。
+```mermaid
+flowchart TD
+    A["使用者輸入優惠需求"] --> B["Streamlit 聊天介面"]
+    B --> C["CouponHub Agent"]
+    C --> D["Ollama / Llama 3.2"]
+    D --> E{"是否呼叫 search_offers？"}
+    E -->|是| F["參數驗證與正規化"]
+    F --> G["search_offers Python Tool"]
+    G --> H[("SQLite 優惠資料庫")]
+    H --> I["Tool Observation"]
+    I --> J["LLM 根據結果產生回答"]
+    J --> K["Streamlit 顯示回答"]
+    E -->|否| L["回報無法確認優惠"]
+    F -.-> M["JSONL Tool Trace"]
+    I -.-> M
+    J -.-> M
+    L -.-> M
+```
 
-目前採用 Tool Calling 架構，
-不宣稱已實作完整 ReAct 或多步驟規劃 Agent。
+系統只查詢已核准且目前有效的優惠，並將 Agent 決策、工具呼叫、查詢結果及最終回答寫入 JSONL Trace。
+
+目前採用 Tool Calling 架構，尚未實作完整 ReAct 或多步驟規劃 Agent。
+
 
 ## 4. Tool 定義
 
