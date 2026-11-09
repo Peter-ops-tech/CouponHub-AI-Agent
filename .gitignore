@@ -1,0 +1,27 @@
+
+# Python 虛擬環境
+.venv/
+
+# Python 暫存檔
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# SQLite 正式資料與備份
+data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# AI Agent 執行紀錄
+logs/
+
+# 私密設定
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# 編輯器暫存
+.vscode/
